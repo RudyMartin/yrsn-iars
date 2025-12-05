@@ -8,7 +8,7 @@ This repository demonstrates how to implement the [YRSN framework](https://githu
 
 ```mermaid
 flowchart LR
-    subgraph Cleanlab["Cleanlab Signals"]
+    subgraph Signals["Signals"]
         A[label_quality]
         B[is_duplicate]
         C[ood_score]
