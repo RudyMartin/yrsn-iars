@@ -1,8 +1,8 @@
 # YRSN-IARS: Intelligent Automation Routing System
 
-**Demo code for implementing [YRSN](https://github.com/RudyMartin/yrsn-context) with Cleanlab data quality signals**
+**Demo code for implementing [YRSN](https://github.com/RudyMartin/yrsn-context) context decomposition with data quality signals**
 
-This repository demonstrates how to implement the [YRSN framework](https://github.com/RudyMartin/yrsn-context) (Y = R + S + N) using Cleanlab to detect data quality issues and route decisions through GREEN/YELLOW/RED automation streams.
+This repository demonstrates how to implement the [YRSN framework](https://github.com/RudyMartin/yrsn-context) (Y = R + S + N) using data quality signals to route decisions through GREEN/YELLOW/RED automation streams.
 
 ## The Core Insight
 
@@ -72,7 +72,7 @@ yrsn-iars/
 │   └── INFRASTRUCTURE_DIAGRAMS.md # Mermaid architecture diagrams
 ├── specs/                          # Specifications
 │   ├── IARS_MASTER_SPEC.md        # Master specification
-│   ├── CLEANLAB_SIGNALS.md        # Cleanlab output documentation
+│   ├── SIGNALS.md                 # Signal output documentation
 │   ├── YRSN_MAPPING.md            # Signal → YRSN mapping rules
 │   ├── NOTEBOOK_USE_CASE_MATRIX.md # Notebook progression guide
 │   └── CODE_REVIEW_AND_FIXES.md   # Implementation notes
@@ -85,7 +85,7 @@ yrsn-iars/
 │   └── 06_production_pipeline.ipynb         # Hard: Full production
 ├── src/yrsn_iars/                  # Source code
 │   ├── adapters/
-│   │   └── cleanlab_adapter.py    # Cleanlab → YRSN conversion
+│   │   └── signal_adapter.py      # Signal → YRSN conversion
 │   ├── pipelines/
 │   │   ├── approval_router.py     # Three-stream routing
 │   │   └── temperature.py         # Temperature-quality duality
@@ -98,15 +98,14 @@ yrsn-iars/
 ## Quick Start
 
 ```python
-from yrsn_iars.adapters import CleanlabAdapter
+from yrsn_iars.adapters import SignalAdapter
 from yrsn_iars.pipelines import ApprovalRouter, TemperatureCalculator
 
-# 1. Get Cleanlab quality scores
-from cleanlab.rank import get_label_quality_scores
-quality_scores = get_label_quality_scores(labels, pred_probs)
+# 1. Get quality scores from your data quality tool
+quality_scores = get_quality_scores(labels, pred_probs)
 
 # 2. Convert to YRSN decomposition
-adapter = CleanlabAdapter()
+adapter = SignalAdapter()
 yrsn = adapter.to_yrsn(quality_scores, pred_probs, labels)
 print(f"R={yrsn.R:.3f}, S={yrsn.S:.3f}, N={yrsn.N:.3f}")
 
@@ -180,14 +179,14 @@ Visual architecture diagrams available in [INFRASTRUCTURE_DIAGRAMS.md](docs/INFR
 
 ## Notebooks
 
-| # | Notebook | Difficulty | Domain | Key Cleanlab Functions |
-|---|----------|------------|--------|------------------------|
-| 01 | Approval Data | Easy | Finance | `get_label_quality_scores` |
-| 02 | Text Classification | Easy | Support | `find_label_issues`, `get_self_confidence` |
-| 03 | Multi-Annotator | Medium | Legal | `get_label_quality_multiannotator` |
-| 04 | RAG/Retrieval | Medium | Knowledge | `Datalab`, `find_overlapping_classes` |
-| 05 | Token/NER | Hard | Documents | `TokenClassificationLab` |
-| 06 | Production Pipeline | Hard | Enterprise | Full integration |
+| # | Notebook | Difficulty | Domain |
+|---|----------|------------|--------|
+| 01 | Approval Data | Easy | Finance |
+| 02 | Text Classification | Easy | Support |
+| 03 | Multi-Annotator | Medium | Legal |
+| 04 | RAG/Retrieval | Medium | Knowledge |
+| 05 | Token/NER | Hard | Documents |
+| 06 | Production Pipeline | Hard | Enterprise |
 
 ## Related Repositories
 
@@ -196,6 +195,4 @@ Visual architecture diagrams available in [INFRASTRUCTURE_DIAGRAMS.md](docs/INFR
 
 ## License
 
-**AGPL-3.0** - This project is licensed under the GNU Affero General Public License v3.0 due to its dependency on Cleanlab, which is AGPL-3.0 licensed.
-
-See [LICENSE](LICENSE) file for details.
+**AGPL-3.0** - See [LICENSE](LICENSE) for details.
