@@ -1,8 +1,8 @@
 # YRSN + Cleanlab: Data Quality for Approval Routing
 
-**Using Cleanlab's data quality signals to power YRSN context decomposition**
+**Using Cleanlab's data quality signals to power [YRSN](https://github.com/RudyMartin/yrsn-context) context decomposition**
 
-This repository shows how to use [Cleanlab](https://github.com/cleanlab/cleanlab) to detect data quality issues and map them to YRSN's context decomposition (Y = R + S + N), enabling intelligent approval routing based on data quality.
+This repository shows how to use [Cleanlab](https://github.com/cleanlab/cleanlab) to detect data quality issues and map them to [YRSN's](https://github.com/RudyMartin/yrsn-context) context decomposition (Y = R + S + N), enabling intelligent approval routing based on data quality.
 
 ## The Core Insight
 
