@@ -6,17 +6,39 @@ This repository demonstrates how to implement the [YRSN framework](https://githu
 
 ## The Core Insight
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  Cleanlab Signals  →  YRSN Decomposition  →  Routing       │
-│                                                             │
-│  label_quality ────→  R (Relevant)  ──┐                    │
-│  is_duplicate  ────→  S (Superfluous) ├──→ Temperature τ   │
-│  ood_score     ────→  N (Noise)      ──┘        ↓          │
-│                                           τ = 1/α          │
-│                                                ↓           │
-│                                     GREEN / YELLOW / RED   │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    subgraph Cleanlab["Cleanlab Signals"]
+        A[label_quality]
+        B[is_duplicate]
+        C[ood_score]
+    end
+
+    subgraph YRSN["YRSN Decomposition"]
+        D[R - Relevant]
+        E[S - Superfluous]
+        F[N - Noise]
+    end
+
+    subgraph Temp["Temperature"]
+        G["τ = 1/α"]
+    end
+
+    subgraph Route["Routing"]
+        H[GREEN]
+        I[YELLOW]
+        J[RED]
+    end
+
+    A --> D
+    B --> E
+    C --> F
+    D --> G
+    E --> G
+    F --> G
+    G --> H
+    G --> I
+    G --> J
 ```
 
 **Temperature-Quality Duality**: `τ = 1/α` where α = quality score (R component)
