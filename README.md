@@ -191,7 +191,7 @@ Visual architecture diagrams available in [INFRASTRUCTURE_DIAGRAMS.md](docs/INFR
 ## Related Repositories
 
 - [yrsn-context](https://github.com/RudyMartin/yrsn-context) - YRSN context engineering framework
-- [yrsn-research](https://github.com/RudyMartin/yrsn-research) - YRSN research algorithms
+- [yrsn-research](https://github.com/RudyMartin/yrsn-research) - YRSN research LLM algorithms
 
 ## License
 
