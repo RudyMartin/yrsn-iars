@@ -1,0 +1,87 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yrsn-iars"
+version = "0.1.0"
+description = "Intelligent Approval Routing System with Cleanlab + YRSN integration"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Rudy Martin", email = "rudy@example.com"}
+]
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+keywords = ["cleanlab", "yrsn", "data-quality", "llm", "approval-routing", "machine-learning"]
+
+dependencies = [
+    "numpy>=1.22.0",
+    "pandas>=1.4.0",
+    "scikit-learn>=1.1.0",
+]
+
+[project.optional-dependencies]
+cleanlab = [
+    "cleanlab>=2.5.0",
+]
+embeddings = [
+    "sentence-transformers>=2.2.0",
+]
+aws = [
+    "boto3>=1.26.0",
+]
+full = [
+    "cleanlab>=2.5.0",
+    "sentence-transformers>=2.2.0",
+    "boto3>=1.26.0",
+    "tqdm>=4.64.0",
+]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+    "jupyterlab>=4.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/RudyMartin/yrsn-iars"
+Documentation = "https://github.com/RudyMartin/yrsn-iars/tree/main/specs"
+Repository = "https://github.com/RudyMartin/yrsn-iars"
+Issues = "https://github.com/RudyMartin/yrsn-iars/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I", "N", "W"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --cov=yrsn_iars --cov-report=term-missing"

@@ -1,0 +1,187 @@
+# YRSN-IARS: Intelligent Approval Routing System
+
+**Cleanlab × YRSN Integration for LLM Context Quality and Approval Routing**
+
+This repository integrates Cleanlab's data quality detection with YRSN's context decomposition framework (Y=R+S+N) to build an intelligent approval routing system with temperature-quality duality.
+
+## What is IARS?
+
+- **I**ntegration - Connect Cleanlab signals to YRSN decomposition
+- **A**pplication - Real-world approval routing and LLM context quality
+- **R**esearch - Experimental notebooks exploring the integration
+- **S**pecification - Detailed specs for production implementation
+
+## The Core Insight
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Cleanlab Signals  →  YRSN Decomposition  →  Routing       │
+│                                                             │
+│  label_quality ────→  R (Relevant)  ──┐                    │
+│  is_duplicate  ────→  S (Superfluous) ├──→ Temperature τ   │
+│  ood_score     ────→  N (Noise)      ──┘        ↓          │
+│                                           τ = 1/α          │
+│                                                ↓           │
+│                                     GREEN / YELLOW / RED   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Temperature-Quality Duality**: `τ = 1/α` where α = quality score (R component)
+- Low τ (high quality) → Tight thresholds → More automation
+- High τ (low quality) → Loose thresholds → More human review
+
+## Three-Stream Routing
+
+| Stream | Confidence | Temperature | Action |
+|--------|------------|-------------|--------|
+| GREEN | Cs ≥ 0.95 | τ < 1.0 | Auto-approve |
+| YELLOW | Cs ≥ 0.70 | τ ≈ 1.0 | AI-assisted review |
+| RED | Cs < 0.70 | τ > 1.5 | Expert review |
+
+## Collapse Type Detection
+
+| Type | Condition | Routing Override |
+|------|-----------|------------------|
+| POISONING | N > 0.3 | Force RED |
+| DISTRACTION | S > 0.4 | Prefer YELLOW |
+| CONFUSION | N > 0.3 AND S > 0.25 | Force RED |
+| CLASH | Risk > 0.6 | Check temperature |
+
+## Repository Structure
+
+```
+yrsn-iars/
+├── docs/                           # Documentation
+│   ├── AWS_DEPLOYMENT_GUIDE.md    # AWS deployment instructions
+│   ├── GCP_DEPLOYMENT_GUIDE.md    # GCP deployment instructions
+│   └── INFRASTRUCTURE_DIAGRAMS.md # Mermaid architecture diagrams
+├── specs/                          # Specifications
+│   ├── IARS_MASTER_SPEC.md        # Master specification
+│   ├── CLEANLAB_SIGNALS.md        # Cleanlab output documentation
+│   ├── YRSN_MAPPING.md            # Signal → YRSN mapping rules
+│   ├── NOTEBOOK_USE_CASE_MATRIX.md # Notebook progression guide
+│   └── CODE_REVIEW_AND_FIXES.md   # Implementation notes
+├── notebooks/                      # Progressive tutorials
+│   ├── 01_cleanlab_for_approval_data.ipynb  # Easy: Basic approval
+│   ├── 02_text_classification_quality.ipynb # Easy: Text classification
+│   ├── 03_multi_annotator_consensus.ipynb   # Medium: Multi-approver
+│   ├── 04_rag_retrieval_quality.ipynb       # Medium: RAG/retrieval
+│   ├── 05_token_ner_quality.ipynb           # Hard: Token/NER
+│   └── 06_production_pipeline.ipynb         # Hard: Full production
+├── src/yrsn_iars/                  # Source code
+│   ├── adapters/
+│   │   └── cleanlab_adapter.py    # Cleanlab → YRSN conversion
+│   ├── pipelines/
+│   │   ├── approval_router.py     # Three-stream routing
+│   │   └── temperature.py         # Temperature-quality duality
+│   └── core/
+│       └── types.py               # Core data types
+├── examples/                       # Standalone examples
+└── tests/                          # Test suite
+```
+
+## Quick Start
+
+```python
+from yrsn_iars.adapters import CleanlabAdapter
+from yrsn_iars.pipelines import ApprovalRouter, TemperatureCalculator
+
+# 1. Get Cleanlab quality scores
+from cleanlab.rank import get_label_quality_scores
+quality_scores = get_label_quality_scores(labels, pred_probs)
+
+# 2. Convert to YRSN decomposition
+adapter = CleanlabAdapter()
+yrsn = adapter.to_yrsn(quality_scores, pred_probs, labels)
+print(f"R={yrsn.R:.3f}, S={yrsn.S:.3f}, N={yrsn.N:.3f}")
+
+# 3. Calculate temperature
+temp_calc = TemperatureCalculator()
+tau = temp_calc.compute(yrsn)
+print(f"Temperature τ={tau:.3f}")
+
+# 4. Route the request
+router = ApprovalRouter()
+decision = router.route(
+    confidence=pred_probs.max(),
+    yrsn=yrsn,
+    temperature=tau
+)
+print(f"Stream: {decision.stream}, Action: {decision.action}")
+```
+
+## Weighted Urgency Formula
+
+```
+U = w₁×T_expiry + w₂×P_business + w₃×S_sentiment + w₄×C_clarity
+
+Where:
+  T_expiry   = Time pressure (deadline proximity)
+  P_business = Business priority (amount × level)
+  S_sentiment = Sentiment urgency (NLP-derived)
+  C_clarity  = Request clarity (R - N)
+
+Default weights: w₁=0.4, w₂=0.3, w₃=0.2, w₄=0.1
+```
+
+## Cloud Deployment
+
+### AWS Architecture
+
+| Service | Purpose |
+|---------|---------|
+| API Gateway | REST API ingestion |
+| Lambda | Serverless processing |
+| Bedrock | Embeddings (Titan) + LLM (Claude) |
+| SageMaker | Custom model hosting |
+| DynamoDB | Decision storage |
+| Step Functions | Workflow orchestration |
+| S3 | Document/model storage |
+
+See [AWS Deployment Guide](docs/AWS_DEPLOYMENT_GUIDE.md)
+
+### GCP Architecture
+
+| Service | Purpose |
+|---------|---------|
+| Cloud Endpoints | REST API ingestion |
+| Cloud Run | Container processing |
+| Vertex AI | Embeddings + predictions |
+| Firestore | Decision storage |
+| Workflows | Orchestration |
+| Cloud Storage | Document/model storage |
+
+See [GCP Deployment Guide](docs/GCP_DEPLOYMENT_GUIDE.md)
+
+### Infrastructure Diagrams
+
+Visual architecture diagrams available in [INFRASTRUCTURE_DIAGRAMS.md](docs/INFRASTRUCTURE_DIAGRAMS.md):
+- AWS/GCP full architecture
+- Data flow diagrams
+- State machine workflows
+- Multi-region deployment
+- Security architecture
+- CI/CD pipeline
+
+## Notebooks
+
+| # | Notebook | Difficulty | Domain | Key Cleanlab Functions |
+|---|----------|------------|--------|------------------------|
+| 01 | Approval Data | Easy | Finance | `get_label_quality_scores` |
+| 02 | Text Classification | Easy | Support | `find_label_issues`, `get_self_confidence` |
+| 03 | Multi-Annotator | Medium | Legal | `get_label_quality_multiannotator` |
+| 04 | RAG/Retrieval | Medium | Knowledge | `Datalab`, `find_overlapping_classes` |
+| 05 | Token/NER | Hard | Documents | `TokenClassificationLab` |
+| 06 | Production Pipeline | Hard | Enterprise | Full integration |
+
+## Related Repositories
+
+- [cleanlab](https://github.com/cleanlab/cleanlab) - Data-centric AI library
+- [yrsn-context](https://github.com/RudyMartin/yrsn-context) - Context engineering framework
+- [yrsn-research](https://github.com/RudyMartin/yrsn-research) - Research algorithms
+
+## License
+
+**AGPL-3.0** - This project is licensed under the GNU Affero General Public License v3.0 due to its dependency on [cleanlab](https://github.com/cleanlab/cleanlab), which is AGPL-3.0 licensed.
+
+See [LICENSE](LICENSE) file for details.
