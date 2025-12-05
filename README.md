@@ -1,8 +1,8 @@
 # YRSN + Cleanlab: Data Quality for Approval Routing
 
-**Extending [YRSN](https://github.com/RudyMartin/yrsn-context) context decomposition with Cleanlab's data quality signals**
+**Extending [YRSN](https://github.com/RudyMartin/yrsn-context) context decomposition with Cleanlab data quality signals**
 
-This repository extends the [YRSN framework](https://github.com/RudyMartin/yrsn-context) (Y = R + S + N) by using [Cleanlab](https://github.com/cleanlab/cleanlab) to detect data quality issues and map them to YRSN components, enabling intelligent approval routing based on data quality.
+This repository extends the [YRSN framework](https://github.com/RudyMartin/yrsn-context) (Y = R + S + N) by using Cleanlab to detect data quality issues and map them to YRSN components, enabling intelligent approval routing based on data quality.
 
 ## The Core Insight
 
@@ -169,12 +169,11 @@ Visual architecture diagrams available in [INFRASTRUCTURE_DIAGRAMS.md](docs/INFR
 
 ## Related Repositories
 
-- [cleanlab](https://github.com/cleanlab/cleanlab) - Data-centric AI library
-- [yrsn-context](https://github.com/RudyMartin/yrsn-context) - Context engineering framework
-- [yrsn-research](https://github.com/RudyMartin/yrsn-research) - Research algorithms
+- [yrsn-context](https://github.com/RudyMartin/yrsn-context) - YRSN context engineering framework
+- [yrsn-research](https://github.com/RudyMartin/yrsn-research) - YRSN research algorithms
 
 ## License
 
-**AGPL-3.0** - This project is licensed under the GNU Affero General Public License v3.0 due to its dependency on [cleanlab](https://github.com/cleanlab/cleanlab), which is AGPL-3.0 licensed.
+**AGPL-3.0** - This project is licensed under the GNU Affero General Public License v3.0 due to its dependency on Cleanlab, which is AGPL-3.0 licensed.
 
 See [LICENSE](LICENSE) file for details.

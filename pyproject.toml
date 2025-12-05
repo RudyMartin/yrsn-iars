@@ -7,7 +7,7 @@ name = "yrsn-iars"
 version = "0.1.0"
 description = "Intelligent Approval Routing System with Cleanlab + YRSN integration"
 readme = "README.md"
-license = {text = "MIT"}
+license = {text = "AGPL-3.0"}
 authors = [
     {name = "Rudy Martin", email = "rudy@example.com"}
 ]
@@ -15,7 +15,7 @@ requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: GNU Affero General Public License v3",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -28,12 +28,10 @@ dependencies = [
     "numpy>=1.22.0",
     "pandas>=1.4.0",
     "scikit-learn>=1.1.0",
+    "cleanlab>=2.5.0",
 ]
 
 [project.optional-dependencies]
-cleanlab = [
-    "cleanlab>=2.5.0",
-]
 embeddings = [
     "sentence-transformers>=2.2.0",
 ]
