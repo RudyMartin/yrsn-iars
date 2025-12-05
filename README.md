@@ -1,15 +1,8 @@
-# YRSN-IARS: Intelligent Approval Routing System
+# YRSN + Cleanlab: Data Quality for Approval Routing
 
-**Cleanlab × YRSN Integration for LLM Context Quality and Approval Routing**
+**Using Cleanlab's data quality signals to power YRSN context decomposition**
 
-This repository integrates Cleanlab's data quality detection with YRSN's context decomposition framework (Y=R+S+N) to build an intelligent approval routing system with temperature-quality duality.
-
-## What is IARS?
-
-- **I**ntegration - Connect Cleanlab signals to YRSN decomposition
-- **A**pplication - Real-world approval routing and LLM context quality
-- **R**esearch - Experimental notebooks exploring the integration
-- **S**pecification - Detailed specs for production implementation
+This repository shows how to use [Cleanlab](https://github.com/cleanlab/cleanlab) to detect data quality issues and map them to YRSN's context decomposition (Y = R + S + N), enabling intelligent approval routing based on data quality.
 
 ## The Core Insight
 
